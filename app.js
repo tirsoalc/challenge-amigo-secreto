@@ -1,5 +1,3 @@
-let listaPessoas = [];
-
 function adicionarAmigo() {
     let nomeAmigo = pegarNomeDoAmigo();
     if (campoDeTextoVazio(nomeAmigo)) {
@@ -29,7 +27,6 @@ function limparCampoDeTexto() {
 }
 
 function adicionarAmigoALista(nomeDoAmigo) {
-    listaPessoas.push(nomeDoAmigo);
     adicionarNovoLi("#listaAmigos", nomeDoAmigo);
 }
 
@@ -41,34 +38,42 @@ function adicionarNovoLi(idElementoPai, texto) {
 }
 
 function sortearAmigo() {
-    if (listaVazia()) {
+    let listaAmigos = [];
+    popularLista(listaAmigos);
+    if (listaVazia(listaAmigos)) {
         alert("A lista de amigos está vazia, por favor inclua pelo menos um nome");
     } else {
-        let indiceAleatorio = gerarIndiceAleatorio();
-        let amigoSorteado = listaPessoas[indiceAleatorio];
+        let indiceAleatorio = gerarIndiceAleatorio(listaAmigos);
+        let amigoSorteado = listaAmigos[indiceAleatorio];
         let fraseAmigoSorteado = "O amigo secreto sorteado foi: "+amigoSorteado;
         adicionarNovoLi("#resultado", fraseAmigoSorteado);
-        limparListaAmigos();
+        limparElementoUl();
     }
 }
 
-function gerarIndiceAleatorio() {
+function popularLista(listaAmigos) {
+    let elementoUl = document.querySelector("#listaAmigos");
+    let listaUl = elementoUl.childNodes;
+    listaUl.forEach(li => {
+        listaAmigos.push(li.innerHTML);
+    })
+}
+
+function gerarIndiceAleatorio(listaAmigos) {
     let valorIndiceMinimo = 0;
-    let valorIndiceMaximo = listaPessoas.length - 1;
+    let valorIndiceMaximo = listaAmigos.length - 1;
     return Math.floor(Math.random() * (valorIndiceMaximo - valorIndiceMinimo + 1) + valorIndiceMinimo);
 }
 
-function listaVazia() {
-    if (listaPessoas.length <= 0) {
+function listaVazia(listaAmigos) {
+    if (listaAmigos.length <= 0) {
         return true;
     }
     return false;
 }
 
-function limparListaAmigos() {
-    listaPessoas = [];
+function limparElementoUl() {
     removerTodosElementosFilho("#listaAmigos");
-
 }
 
 function removerTodosElementosFilho(idElementoPai) {
